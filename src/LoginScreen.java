@@ -7,6 +7,33 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.BorderLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,6 +46,7 @@ public class LoginScreen extends JFrame {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.setBackground(new Color(123, 112, 246)); // Violeta escuro
+
 
         // Adicionar o rótulo "Login" acima da janela
         JLabel titleLabel = new JLabel("Login");
@@ -49,11 +77,11 @@ public class LoginScreen extends JFrame {
         shadowPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Remover a borda
 
         JPanel formPanel = new JPanel();
-        formPanel.setBackground(new Color(238, 130, 238)); // Violeta escuro
+        formPanel.setBackground(new Color(172, 189, 61)); // Violeta escuro
         formPanel.setLayout(new GridBagLayout());
 
         // Adicionar borda fina ao redor do formPanel
-        Border formPanelBorder = BorderFactory.createLineBorder(new Color(75, 0, 130), 1, true);
+        Border formPanelBorder = BorderFactory.createLineBorder(new Color(0, 0, 0), 1, true);
         formPanel.setBorder(formPanelBorder);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -93,7 +121,7 @@ public class LoginScreen extends JFrame {
         formPanel.add(loginButton, gbc);
 
         JLabel registerLabel = new JLabel("Ainda não sou cadastrado");
-        registerLabel.setForeground(new Color(75, 0, 130)); // Azul violeta
+        registerLabel.setForeground(new Color(0, 0, 0)); // Azul violeta
         registerLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         registerLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
@@ -116,8 +144,9 @@ public class LoginScreen extends JFrame {
 
         getContentPane().add(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(null);
+        setSize(800, 600); // Defina a largura e a altura desejadas
+        setLocationRelativeTo(null); // Centralize a janela na tela
+        setUndecorated(true); // Remover a barra de título (opcional)
         setVisible(true);
 
         loginButton.addActionListener(new ActionListener() {
@@ -141,6 +170,9 @@ public class LoginScreen extends JFrame {
                             LoginScreen.this.username = username; // atribuir o nome de usuário à variável da classe
                             dispose(); // Fechar a tela de login
                             OverGolsInterface overGolsInterface = new OverGolsInterface(username); // passar o nome de usuário para a classe OverGolsInterface
+                            overGolsInterface.setSize(800, 600); // Defina a largura e a altura desejadas
+                            overGolsInterface.setLocationRelativeTo(null); // Centralize a janela na tela
+                            overGolsInterface.setUndecorated(true); // Remover a barra de título (opcional)
                             overGolsInterface.setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(LoginScreen.this, "Usuário ou senha inválidos!",

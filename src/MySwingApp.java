@@ -18,6 +18,9 @@ public class MySwingApp extends JFrame {
 
         // Fazer a janela começar em tela cheia
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setSize(800, 600); // Defina a largura e a altura desejadas
+        setLocationRelativeTo(null); // Centralize a janela na tela
+        setUndecorated(true); // Remover a barra de título (opcional)
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
@@ -115,7 +118,6 @@ public class MySwingApp extends JFrame {
         getContentPane().add(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
-        setLocationRelativeTo(null);
         setVisible(true);
 
         // Ação do botão "Cadastrar"

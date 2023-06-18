@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+
 public class OverGolsInterface extends JFrame {
     private Partidas partidas;
     private JTextPane dadosTextPane;
@@ -19,36 +20,43 @@ public class OverGolsInterface extends JFrame {
         BancoDeDados bancoDeDados = new BancoDeDados("root", "Gdyp07@o");
         partidas = new Partidas(bancoDeDados);
 
-
         // Configure a janela
         setTitle("Over Gols");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Inicializar em tela cheia
+        setSize(800, 600); // Defina a largura e a altura desejadas
+        setLocationRelativeTo(null); // Centralize a janela na tela
         setUndecorated(true); // Remover a barra de título (opcional)
+
 
         // Crie o painel principal
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(new Color(240, 240, 240));
 
         // Cabeçalho
         JPanel cabecalhoPanel = new JPanel(new BorderLayout());
-        cabecalhoPanel.setBackground(Color.WHITE);
+        cabecalhoPanel.setBackground(new Color(0, 128, 0)); // Defina a cor de fundo para verde
         cabecalhoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Título com logotipo
+// Título com logotipo
         ImageIcon logo = new ImageIcon("Overgols-master/src/over1.png"); // Substitua pelo caminho do seu logotipo
         JLabel tituloLabel = new JLabel(logo);
         cabecalhoPanel.add(tituloLabel, BorderLayout.WEST);
 
-        // Campo de busca
+// Campo de busca
         JTextField buscarTextField = new JTextField();
-        buscarTextField.setPreferredSize(new Dimension(200, 30));
-        cabecalhoPanel.add(buscarTextField, BorderLayout.CENTER);
+        buscarTextField.setPreferredSize(new Dimension(150, 30));
+        buscarTextField.setBackground(new Color(200, 200, 200));
 
-        // Usuário e botão de sair
+// Centralize o campo de busca no cabeçalho
+        JPanel buscaPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buscaPanel.setBackground(new Color(0, 128, 0)); // Defina a cor de fundo para verde
+        buscaPanel.add(buscarTextField);
+        cabecalhoPanel.add(buscaPanel, BorderLayout.CENTER);
+
+// Usuário e botão de sair
         JPanel usuarioPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        usuarioPanel.setBackground(Color.WHITE);
+        usuarioPanel.setBackground(new Color(0, 128, 0)); // Defina a cor de fundo para verde
         JLabel welcomeLabel = new JLabel("Bem-vindo, " + nomeUsuario + "!");
 
         JButton sairButton = new JButton("Sair");
@@ -66,10 +74,14 @@ public class OverGolsInterface extends JFrame {
 
         panel.add(cabecalhoPanel, BorderLayout.NORTH);
 
+
+
         // Crie o JTextPane para exibir as próximas partidas e a probabilidade de mais de um gol
         dadosTextPane = new JTextPane();
         dadosTextPane.setEditable(false);
         dadosTextPane.setFont(new Font("Arial", Font.PLAIN, 14));
+        dadosTextPane.setBackground(Color.BLACK); // Defina o fundo como preto
+
 
         // Adicione o JTextPane a um JScrollPane para permitir a rolagem
         JScrollPane dadosScrollPane = new JScrollPane(dadosTextPane);
@@ -100,7 +112,7 @@ public class OverGolsInterface extends JFrame {
         try {
             // Estilo para as partidas
             StyleConstants.setAlignment(partidaStyle, StyleConstants.ALIGN_LEFT);
-            StyleConstants.setFontSize(partidaStyle, 14);
+            StyleConstants.setFontSize(partidaStyle, 1);
             StyleConstants.setForeground(partidaStyle, Color.DARK_GRAY);
             StyleConstants.setSpaceAbove(partidaStyle, 10);
 
@@ -126,38 +138,65 @@ public class OverGolsInterface extends JFrame {
 
     private JPanel createPartidaPanel(String partida, String probabilidade) {
         JPanel outerPanel = new JPanel(new BorderLayout());
-        outerPanel.setBackground(Color.WHITE);
-        outerPanel.setPreferredSize(new Dimension(800, 120)); // Aumente a altura para 120
+        outerPanel.setBackground(new Color(240, 240, 240));
+        outerPanel.setPreferredSize(new Dimension(800, 80)); // Ajuste a largura e a altura desejadas
 
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
-        panel.setPreferredSize(new Dimension(670, 100));
+        panel.setPreferredSize(new Dimension(300, 60)); // Ajuste a largura e a altura desejadas
 
-        // Formate a string de partida com formatação
-        String formattedPartida = String.format("%s", partida);
-        JLabel partidaLabel = new JLabel(formattedPartida);
-        partidaLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        partidaLabel.setForeground(Color.DARK_GRAY);
-        partidaLabel.setPreferredSize(new Dimension(380, 50)); // Aumente a altura para 50
-        panel.add(partidaLabel, BorderLayout.CENTER);
+
+        // Configurar GridBagConstraints para alinhar a probabilidade ao centro e à direita
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 1; // Alterar para a coluna desejada
+        c.gridy = 0; // Alterar para a linha desejada
+        c.weightx = 1.0; // Aumenta o peso horizontal para esticar o componente na célula
+        c.anchor = GridBagConstraints.FIRST_LINE_END; // Alinha o componente ao canto superior direito
+        c.insets = new Insets(0, 10, 0, 0); // Adiciona margem à esquerda para alinhamento à direita
+
+        String[] partes = partida.split("\n"); // Dividir a partida em duas partes
+
+// Crie os JLabels para exibir as partes da partida
+        JLabel parte1Label = new JLabel(partes[0]);
+        JLabel parte2Label = new JLabel(partes[1]);
+
+// Configure as propriedades dos JLabels
+        parte1Label.setFont(new Font("Arial", Font.BOLD, 14));
+        parte1Label.setForeground(Color.DARK_GRAY);
+        parte2Label.setFont(new Font("Arial", Font.BOLD, 14));
+        parte2Label.setForeground(Color.DARK_GRAY);
+
+// Configurar a posição do texto da partida
+        c.gridx = 0; // Defina a coluna desejada
+        c.gridy = 0; // Defina a linha desejada
+        c.anchor = GridBagConstraints.FIRST_LINE_START; // Alinha o componente ao canto superior esquerdo
+        panel.add(parte1Label, c);
+
+        c.gridx = 0; // Defina a coluna desejada
+        c.gridy = 1; // Defina a linha desejada
+        c.anchor = GridBagConstraints.FIRST_LINE_START; // Alinha o componente ao canto superior esquerdo
+        panel.add(parte2Label, c);
+
+
 
         // Formate a string de probabilidade com formatação
         String formattedProbabilidade = String.format("%s", probabilidade);
         JLabel probabilidadeLabel = new JLabel(formattedProbabilidade);
         probabilidadeLabel.setFont(new Font("Arial", Font.BOLD, 14));
         probabilidadeLabel.setForeground(Color.RED);
-        JPanel probabilidadePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        probabilidadePanel.setBackground(Color.WHITE);
-        probabilidadePanel.add(probabilidadeLabel);
-        probabilidadePanel.setPreferredSize(new Dimension(380, 20));
-        panel.add(probabilidadePanel, BorderLayout.SOUTH);
+
+        // Configurar GridBagConstraints para alinhar a probabilidade à direita
+        c.gridx = 1;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.LINE_END;
+        panel.add(probabilidadeLabel, c);
 
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         panel.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
         // Centralize o painel no contêiner principal
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        centerPanel.setBackground(Color.WHITE);
+        centerPanel.setBackground(new Color(0, 0, 0));
         centerPanel.add(panel);
 
         // Adicione o painel centralizado ao contêiner externo

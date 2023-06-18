@@ -19,7 +19,7 @@ public class Partidas {
             connection = bancoDeDados.conectar();
 
             // Criar a consulta SQL para obter os próximos jogos
-            String sql = "SELECT p.RODADAS, p.DATADAPARTIDA, p.HORADAPARTIDA, t1.IDNOMETIMES AS TIME_MANDANTE, t2.IDNOMETIMES AS TIME_VISITANTE " +
+            String sql = "SELECT p.RODADAS, p.DATADAPARTIDA, SUBSTRING(p.HORADAPARTIDA, 1, 5) AS HORADAPARTIDA, t1.IDNOMETIMES AS TIME_MANDANTE, t2.IDNOMETIMES AS TIME_VISITANTE " +
                     "FROM PARTIDAS p " +
                     "INNER JOIN TIMES t1 ON p.IDTIMEMANDANTE = t1.IDTIMES " +
                     "INNER JOIN TIMES t2 ON p.IDTIMEVISITANTE = t2.IDTIMES " +
@@ -27,6 +27,7 @@ public class Partidas {
                     "   SELECT MIN(STR_TO_DATE(DATADAPARTIDA, '%d/%m/%Y')) FROM PARTIDAS WHERE STR_TO_DATE(DATADAPARTIDA, '%d/%m/%Y') > CURDATE()" +
                     ") " +
                     "ORDER BY STR_TO_DATE(p.DATADAPARTIDA, '%d/%m/%Y'), STR_TO_DATE(p.HORADAPARTIDA, '%H:%i')";
+
 
 
             // Preparar a consulta SQL
@@ -43,13 +44,16 @@ public class Partidas {
                 String timeMandante = resultSet.getString("TIME_MANDANTE");
                 String timeVisitante = resultSet.getString("TIME_VISITANTE");
 
-                // Criar uma string com as informações do jogo
-                String jogo = dataPartida + " " + timeMandante + "\n" + horaPartida + " " + timeVisitante;
+                // Remover o ano da data
+                String dataSemAno = dataPartida.substring(0, 5); // Extrair apenas o dia e o mês (posições 0 a 4)
 
+                // Criar uma string com as informações do jogo
+                String jogo = dataSemAno + " " + timeMandante + "\n" + horaPartida + " " + timeVisitante;
 
                 // Adicionar o jogo à lista
                 jogos.add(jogo);
             }
+
 
             resultSet.close();
             statement.close();
