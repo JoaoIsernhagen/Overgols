@@ -5,8 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LoginScreen extends JFrame {
+    private String username;
+
     public LoginScreen() {
         super("Login Screen");
 
@@ -116,7 +122,42 @@ public class LoginScreen extends JFrame {
 
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Lógica de autenticação do usuário
+                String username = userField.getText();
+                String password = new String(passwordField.getPassword());
+
+                // Verificar se o usuário e a senha estão corretos no banco de dados
+                BancoDeDados bancoDeDados = new BancoDeDados("root", "Gdyp07@o");
+                Connection connection = bancoDeDados.conectar();
+                if (connection != null) {
+                    try {
+                        String query = "SELECT * FROM usuario WHERE nomeusuario = ? AND senhausuario = ?";
+                        PreparedStatement statement = connection.prepareStatement(query);
+                        statement.setString(1, username);
+                        statement.setString(2, password);
+                        ResultSet resultSet = statement.executeQuery();
+
+                        if (resultSet.next()) {
+                            // Usuário autenticado com sucesso
+                            LoginScreen.this.username = username; // atribuir o nome de usuário à variável da classe
+                            dispose(); // Fechar a tela de login
+                            OverGolsInterface overGolsInterface = new OverGolsInterface(username); // passar o nome de usuário para a classe OverGolsInterface
+                            overGolsInterface.setVisible(true);
+                        } else {
+                            JOptionPane.showMessageDialog(LoginScreen.this, "Usuário ou senha inválidos!",
+                                    "Erro de autenticação", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(LoginScreen.this,
+                                "Erro ao executar a consulta: " + ex.getMessage(), "Erro de banco de dados",
+                                JOptionPane.ERROR_MESSAGE);
+                    } finally {
+                        bancoDeDados.fecharConexao(connection);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(LoginScreen.this, "Erro ao conectar ao banco de dados!",
+                            "Erro de conexão", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }
@@ -125,4 +166,3 @@ public class LoginScreen extends JFrame {
         SwingUtilities.invokeLater(LoginScreen::new);
     }
 }
-

@@ -3,14 +3,25 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class MySwingApp extends JFrame {
+    private BancoDeDados bancoDeDados;
+
     public MySwingApp() {
         super("My Swing App");
 
+        // Crie uma instância da classe BancoDeDados
+        bancoDeDados = new BancoDeDados("root", "Gdyp07@o");
+
+        // Fazer a janela começar em tela cheia
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
-        mainPanel.setBackground(new Color(123, 112, 246)); // Violeta escuro
+        mainPanel.setBackground(Color.BLACK); // Alterar para a cor preta
 
         // Adicionar o rótulo "Cadastro" acima da janela
         JLabel titleLabel = new JLabel("Cadastro");
@@ -111,14 +122,36 @@ public class MySwingApp extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Aqui você pode adicionar a lógica para processar o cadastro
+                // Obtenha os dados do usuário do JTextField e JPasswordField
+                String nome = textField1.getText();
+                String email = textField2.getText();
+                String senha = new String(passwordField.getPassword());
 
-                // Exibir a mensagem de "Cadastro concluído"
-                JOptionPane.showMessageDialog(MySwingApp.this, "Cadastro concluído");
+                // Insira os dados do usuário no banco de dados
+                Connection connection = bancoDeDados.conectar();
+                if (connection != null) {
+                    try {
+                        String sql = "INSERT INTO usuario (nomeusuario, emailusuario, senhausuario) VALUES (?, ?, ?)";
+                        PreparedStatement statement = connection.prepareStatement(sql);
+                        statement.setString(1, nome);
+                        statement.setString(2, email);
+                        statement.setString(3, senha);
+                        statement.executeUpdate();
+                        statement.close();
+                        bancoDeDados.fecharConexao(connection);
 
-                // Voltar para a tela de login
-                dispose(); // Fecha a tela de cadastro
-                new LoginScreen(); // Abre a tela de login novamente
+                        // Exibir a mensagem de "Cadastro concluído"
+                        JOptionPane.showMessageDialog(MySwingApp.this, "Cadastro concluído");
+
+                        // Voltar para a tela de login
+                        dispose(); // Fecha a tela de cadastro
+                        new LoginScreen(); // Abre a tela de login novamente
+                    } catch (SQLException ex) {
+                        System.out.println("Erro ao inserir dados no banco de dados: " + ex.getMessage());
+                    }
+                } else {
+                    System.out.println("Não foi possível estabelecer conexão com o banco de dados.");
+                }
             }
         });
     }
