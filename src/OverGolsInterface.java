@@ -6,82 +6,73 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-
 public class OverGolsInterface extends JFrame {
     private Partidas partidas;
     private JTextPane dadosTextPane;
     private String nomeUsuario;
-    private String conteudoOriginal;
-
-
 
     public OverGolsInterface(String username) {
         this.nomeUsuario = username;
 
-        // Crie uma instância do banco de dados e da classe Partidas
+        // Create an instance of the database and the Partidas class
         BancoDeDados bancoDeDados = new BancoDeDados("root", "Gdyp07@o");
         partidas = new Partidas(bancoDeDados);
 
-        // Configure a janela
+        // Configure the window
         setTitle("Over Gols");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600); // Defina a largura e a altura desejadas
-        setLocationRelativeTo(null); // Centralize a janela na tela
-        setUndecorated(true); // Remover a barra de título (opcional)
+        setSize(800, 600);
+        setLocationRelativeTo(null);
+        setUndecorated(true);
 
-
-        // Crie o painel principal
+        // Create the main panel
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        // Cabeçalho
+        // Header
         JPanel cabecalhoPanel = new JPanel(new BorderLayout());
-        cabecalhoPanel.setBackground(new Color(54, 59, 78)); // Defina a cor de fundo para verde
+        cabecalhoPanel.setBackground(new Color(54, 59, 78));
         cabecalhoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-// Carregando a imagem do arquivo
+        // Loading the image from the file
         ImageIcon logo = new ImageIcon("C:\\Users\\joaor\\eclipse-workspace\\Overgols\\imagens\\fd2623dedfa19289f8110784f36dc541.png");
 
-// Redimensionando a imagem para um tamanho desejado
+        // Resizing the image to the desired size
         Image imagemRedimensionada = logo.getImage().getScaledInstance(150, 20, Image.SCALE_SMOOTH);
 
-// Criando um novo ImageIcon com a imagem redimensionada
+        // Creating a new ImageIcon with the resized image
         ImageIcon logoRedimensionado = new ImageIcon(imagemRedimensionada);
 
-// Criando o JLabel com o ImageIcon redimensionado
+        // Creating the JLabel with the resized ImageIcon
         JLabel tituloLabel = new JLabel(logoRedimensionado);
-
-// Definindo o alinhamento do JLabel
         tituloLabel.setHorizontalAlignment(SwingConstants.LEFT);
-
-// Adicionando o JLabel ao painel
         cabecalhoPanel.add(tituloLabel, BorderLayout.WEST);
 
-
-// Campo de busca
+        // Search field
         JTextField buscarTextField = new JTextField();
         buscarTextField.setPreferredSize(new Dimension(150, 30));
         buscarTextField.setBackground(new Color(62, 63, 75));
 
-// Centralize o campo de busca no cabeçalho
         JPanel buscaPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buscaPanel.setBackground(new Color(54, 59, 78)); // Defina a cor de fundo para verde
+        buscaPanel.setBackground(new Color(54, 59, 78));
         buscaPanel.add(buscarTextField);
         cabecalhoPanel.add(buscaPanel, BorderLayout.CENTER);
 
-// Usuário e botão de sair
+        // User and logout button
         JPanel usuarioPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        usuarioPanel.setBackground(new Color(54, 59, 78)); // Defina a cor de fundo para verde
+        usuarioPanel.setBackground(new Color(54, 59, 78));
         JLabel welcomeLabel = new JLabel("Bem-vindo, " + nomeUsuario + "!");
-
         JButton sairButton = new JButton("Sair");
-        sairButton.setBorderPainted(false); // Remove a borda do botão
+        sairButton.setBorderPainted(false);
+        sairButton.setForeground(Color.WHITE);
+        sairButton.setFocusPainted(false);
+        sairButton.setContentAreaFilled(false);
         sairButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                dispose(); // Fecha a janela atual
+                dispose();
                 LoginScreen loginScreen = new LoginScreen();
-                loginScreen.setVisible(true); // Abre a tela de login
+                loginScreen.setVisible(true);
             }
         });
         usuarioPanel.add(welcomeLabel);
@@ -90,145 +81,108 @@ public class OverGolsInterface extends JFrame {
 
         panel.add(cabecalhoPanel, BorderLayout.NORTH);
 
-
-
-        // Crie o JTextPane para exibir as próximas partidas e a probabilidade de mais de um gol
+        // JTextPane for displaying upcoming matches and probability of more than one goal
         dadosTextPane = new JTextPane();
         dadosTextPane.setEditable(false);
-        dadosTextPane.setFont(new Font("Arial", Font.PLAIN, 14));
-        dadosTextPane.setBackground(new Color(49, 55, 72)); // Defina o fundo como preto
+        dadosTextPane.setBackground(new Color(39, 43, 57));
+        dadosTextPane.setForeground(Color.WHITE);
+        dadosTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
 
+        // ScrollPane for the JTextPane
+        JScrollPane scrollPane = new JScrollPane(dadosTextPane);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setBackground(new Color(39, 43, 57));
 
-        // Adicione o JTextPane a um JScrollPane para permitir a rolagem
-        JScrollPane dadosScrollPane = new JScrollPane(dadosTextPane);
-        panel.add(dadosScrollPane, BorderLayout.CENTER);
+        panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Adicione o painel à janela
+        // Footer
+        JPanel rodapePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rodapePanel.setBackground(new Color(54, 59, 78));
+        JLabel rodapeLabel = new JLabel("© 2023 Over Gols. Todos os direitos reservados.");
+        rodapeLabel.setForeground(Color.WHITE);
+        rodapePanel.add(rodapeLabel);
+
+        panel.add(rodapePanel, BorderLayout.SOUTH);
+
+        // Add the main panel to the frame
         add(panel);
 
-        // Atualize as informações na interface
+        // Load the data initially
         atualizarDados();
     }
 
     private void atualizarDados() {
-        // Obtenha a lista de próximas partidas
+        // Get the list of upcoming matches
         List<String> proximasPartidas = partidas.obterProximasPartidas();
 
-        // Calcule e obtenha a probabilidade de mais de um gol
+        // Calculate and retrieve the probability of more than one goal
         List<String> probabilidades = partidas.calcularEImprimirProbabilidadeMaisDeUmGol();
 
-        // Limpe o conteúdo anterior do JTextPane
-        dadosTextPane.setText(null);
+        // Clear the previous content of the JTextPane
+        dadosTextPane.setText("");
 
-        // Adicione as partidas ao JTextPane
-        StyledDocument doc = dadosTextPane.getStyledDocument();
-        Style partidaStyle = doc.addStyle("PartidaStyle", null);
-        Style probabilidadeStyle = doc.addStyle("ProbabilidadeStyle", null);
+        // Add the matches to the JTextPane
+        for (int i = 0; i < proximasPartidas.size(); i++) {
+            String partida = proximasPartidas.get(i);
+            String probabilidade = probabilidades.get(i);
 
-        try {
-            // Estilo para as partidas
-            StyleConstants.setAlignment(partidaStyle, StyleConstants.ALIGN_LEFT);
-            StyleConstants.setFontSize(partidaStyle, 1);
-            StyleConstants.setForeground(partidaStyle, Color.DARK_GRAY);
-            StyleConstants.setSpaceAbove(partidaStyle, 10);
-
-            // Estilo para as probabilidades
-            StyleConstants.setAlignment(probabilidadeStyle, StyleConstants.ALIGN_RIGHT);
-            StyleConstants.setBold(probabilidadeStyle, true);
-            StyleConstants.setFontSize(probabilidadeStyle, 14);
-            StyleConstants.setForeground(probabilidadeStyle, Color.RED);
-
-            // Adiciona as partidas ao JTextPane
-            for (int i = 0; i < proximasPartidas.size(); i++) {
-                String partida = proximasPartidas.get(i);
-                String probabilidade = probabilidades.get(i);
-                JPanel partidaPanel = createPartidaPanel(partida, probabilidade);
-
-                dadosTextPane.insertComponent(partidaPanel);
-                doc.insertString(doc.getLength(), "\n", partidaStyle);
-            }
-        } catch (BadLocationException e) {
-            e.printStackTrace();
+            JPanel partidaPanel = createPartidaPanel(partida, probabilidade);
+            dadosTextPane.insertComponent(partidaPanel);
+            dadosTextPane.insertComponent(Box.createVerticalStrut(10)); // Adds vertical space between the matches
         }
     }
 
     private JPanel createPartidaPanel(String partida, String probabilidade) {
         JPanel outerPanel = new JPanel(new BorderLayout());
-        outerPanel.setPreferredSize(new Dimension(800, 80)); // Ajuste a largura e a altura desejadas
+        outerPanel.setPreferredSize(new Dimension(800, 80));
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
-        panel.setPreferredSize(new Dimension(300, 60)); // Ajuste a largura e a altura desejadas
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(new Color(123, 112, 246));
+        panel.setPreferredSize(new Dimension(300, 60));
 
+        JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+        infoPanel.setBackground(new Color(123, 112, 246));
 
-        // Configurar GridBagConstraints para alinhar a probabilidade ao centro e à direita
-        GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 1; // Alterar para a coluna desejada
-        c.gridy = 0; // Alterar para a linha desejada
-        c.weightx = 1.0; // Aumenta o peso horizontal para esticar o componente na célula
-        c.anchor = GridBagConstraints.FIRST_LINE_END; // Alinha o componente ao canto superior direito
-        c.insets = new Insets(0, 10, 0, 0); // Adiciona margem à esquerda para alinhamento à direita
+        String[] partes = partida.split("\n");
 
-        String[] partes = partida.split("\n"); // Dividir a partida em duas partes
-
-// Crie os JLabels para exibir as partes da partida
         JLabel parte1Label = new JLabel(partes[0]);
         JLabel parte2Label = new JLabel(partes[1]);
 
-// Configure as propriedades dos JLabels
         parte1Label.setFont(new Font("Arial", Font.BOLD, 14));
         parte1Label.setForeground(Color.DARK_GRAY);
         parte2Label.setFont(new Font("Arial", Font.BOLD, 14));
         parte2Label.setForeground(Color.DARK_GRAY);
 
-// Configurar a posição do texto da partida
-        c.gridx = 0; // Defina a coluna desejada
-        c.gridy = 0; // Defina a linha desejada
-        c.anchor = GridBagConstraints.FIRST_LINE_START; // Alinha o componente ao canto superior esquerdo
-        panel.add(parte1Label, c);
+        infoPanel.add(parte1Label);
+        infoPanel.add(parte2Label);
+        panel.add(infoPanel, BorderLayout.WEST);
 
-        c.gridx = 0; // Defina a coluna desejada
-        c.gridy = 1; // Defina a linha desejada
-        c.anchor = GridBagConstraints.FIRST_LINE_START; // Alinha o componente ao canto superior esquerdo
-        panel.add(parte2Label, c);
-
-
-
-        // Formate a string de probabilidade com formatação
-        String formattedProbabilidade = String.format("%s", probabilidade);
-        JLabel probabilidadeLabel = new JLabel(formattedProbabilidade);
+        JLabel probabilidadeLabel = new JLabel(probabilidade);
         probabilidadeLabel.setFont(new Font("Arial", Font.BOLD, 14));
         probabilidadeLabel.setForeground(Color.RED);
-
-        // Configurar GridBagConstraints para alinhar a probabilidade à direita
-        c.gridx = 1;
-        c.gridy = 0;
-        c.anchor = GridBagConstraints.LINE_END;
-        panel.add(probabilidadeLabel, c);
+        probabilidadeLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        panel.add(probabilidadeLabel, BorderLayout.CENTER);
 
         Border border = BorderFactory.createLineBorder(Color.BLACK);
         panel.setBorder(BorderFactory.createCompoundBorder(border, BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 
-        // Centralize o painel no contêiner principal
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        centerPanel.setBackground(new Color(49, 55, 72));
+        centerPanel.setBackground(new Color(39, 43, 57));
         centerPanel.add(panel);
 
-        // Adicione o painel centralizado ao contêiner externo
         outerPanel.add(centerPanel, BorderLayout.CENTER);
 
         return outerPanel;
     }
 
     public static void main(String[] args) {
-        // Definir o estilo visual do aplicativo para o estilo do sistema operacional
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        // Crie a interface gráfica
         SwingUtilities.invokeLater(() -> {
             OverGolsInterface overGolsInterface = new OverGolsInterface("fulano");
             overGolsInterface.setVisible(true);
