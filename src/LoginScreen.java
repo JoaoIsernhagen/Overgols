@@ -14,10 +14,12 @@ public class LoginScreen extends JFrame {
     private String username;
 
     public LoginScreen() {
-        super("Login Screen");
+        super("Login");
 
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Inicia maximizada
-        setUndecorated(true); // Remove a barra de título
+
+
+        setSize(800, 600); // Define o tamanho da janela
+
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
@@ -123,7 +125,6 @@ public class LoginScreen extends JFrame {
                             OverGolsInterface overGolsInterface = new OverGolsInterface(username); // passar o nome de usuário para a classe OverGolsInterface
                             overGolsInterface.setSize(800, 600); // Defina a largura e a altura desejadas
                             overGolsInterface.setLocationRelativeTo(null); // Centralize a janela na tela
-                            overGolsInterface.setUndecorated(true); // Remover a barra de título (opcional)
                             overGolsInterface.setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(LoginScreen.this, "Usuário ou senha inválidos!",

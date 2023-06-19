@@ -11,6 +11,7 @@ public class OverGolsInterface extends JFrame {
     private JTextPane dadosTextPane;
     private String nomeUsuario;
 
+
     public OverGolsInterface(String username) {
         this.nomeUsuario = username;
 
@@ -22,9 +23,8 @@ public class OverGolsInterface extends JFrame {
         // Configure the window
         setTitle("Over Gols");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
-        setLocationRelativeTo(null);
-        setUndecorated(true);
+        setSize(800, 600); // Define o tamanho da janela
+
 
         // Create the main panel
         JPanel panel = new JPanel();

@@ -11,14 +11,13 @@ public class MySwingApp extends JFrame {
     private BancoDeDados bancoDeDados;
 
     public MySwingApp() {
-        super("My Swing App");
+        super("Cadastro");
 
         // Crie uma instância da classe BancoDeDados
         bancoDeDados = new BancoDeDados("root", "Gdyp07@o");
 
-        // Fazer a janela começar em tela cheia
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setUndecorated(true); // Remover a barra de título (opcional)
+        setSize(800, 600); // Define o tamanho da janela
+
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
