@@ -1,6 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.text.*;
+import java.awt.Font;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +17,7 @@ public class OverGolsInterface extends JFrame {
         // Create an instance of the database and the Partidas class
         BancoDeDados bancoDeDados = new BancoDeDados("root", "Gdyp07@o");
         partidas = new Partidas(bancoDeDados);
+
 
         // Configure the window
         setTitle("Over Gols");
@@ -58,10 +59,16 @@ public class OverGolsInterface extends JFrame {
         buscaPanel.add(buscarTextField);
         cabecalhoPanel.add(buscaPanel, BorderLayout.CENTER);
 
-        // User and logout button
+        // Crie uma instância da classe Font com a fonte desejada
+        Font fontePersonalizada = new Font("Novo Correio", Font.CENTER_BASELINE, 14);
+
+// Crie o JLabel com o texto e a fonte personalizada
+        JLabel welcomeLabel = new JLabel( nomeUsuario + "!");
+        welcomeLabel.setFont(fontePersonalizada);
+
+// Continue com o restante do código
         JPanel usuarioPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         usuarioPanel.setBackground(new Color(54, 59, 78));
-        JLabel welcomeLabel = new JLabel("Bem-vindo, " + nomeUsuario + "!");
         JButton sairButton = new JButton("Sair");
         sairButton.setBorderPainted(false);
         sairButton.setForeground(Color.WHITE);
@@ -78,7 +85,6 @@ public class OverGolsInterface extends JFrame {
         usuarioPanel.add(welcomeLabel);
         usuarioPanel.add(sairButton);
         cabecalhoPanel.add(usuarioPanel, BorderLayout.EAST);
-
         panel.add(cabecalhoPanel, BorderLayout.NORTH);
 
         // JTextPane for displaying upcoming matches and probability of more than one goal

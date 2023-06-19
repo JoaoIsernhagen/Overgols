@@ -44,6 +44,7 @@ public class Time {
                 resultSet.close();
                 statement.close();
             } catch (SQLException e) {
+                e.printStackTrace();
             } finally {
                 bancoDeDados.fecharConexao(connection);
             }
@@ -51,4 +52,5 @@ public class Time {
 
         return times;
     }
+
 }

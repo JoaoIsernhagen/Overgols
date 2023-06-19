@@ -6,6 +6,7 @@ public class Partidas {
     private final BancoDeDados bancoDeDados;
     private Connection connection;
 
+
     public Partidas(BancoDeDados bancoDeDados) {
         this.bancoDeDados = bancoDeDados;
     }
