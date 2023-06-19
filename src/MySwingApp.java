@@ -18,53 +18,32 @@ public class MySwingApp extends JFrame {
 
         // Fazer a janela começar em tela cheia
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setSize(800, 600); // Defina a largura e a altura desejadas
-        setLocationRelativeTo(null); // Centralize a janela na tela
         setUndecorated(true); // Remover a barra de título (opcional)
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridBagLayout());
-        mainPanel.setBackground(Color.BLACK); // Alterar para a cor preta
+        mainPanel.setLayout(new BorderLayout());
+        mainPanel.setBackground(new Color(49, 55, 72)); // Fundo escuro
 
         // Adicionar o rótulo "Cadastro" acima da janela
         JLabel titleLabel = new JLabel("Cadastro");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        titleLabel.setForeground(new Color(75, 0, 130)); // Azul violeta
-        GridBagConstraints titleGbc = new GridBagConstraints();
-        titleGbc.gridx = 0;
-        titleGbc.gridy = 0;
-        titleGbc.insets = new Insets(10, 0, 10, 0);
-        mainPanel.add(titleLabel, titleGbc);
-
-        JPanel shadowPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g.create();
-                int shadowSize = 10;
-                int shadowOpacity = 100;
-                int width = getWidth();
-                int height = getHeight();
-                Color shadowColor = new Color(0, 0, 0, shadowOpacity);
-                g2d.setColor(shadowColor);
-                g2d.fillRect(shadowSize, shadowSize, width - 2 * shadowSize, height - 2 * shadowSize);
-                g2d.dispose();
-            }
-        };
-        shadowPanel.setLayout(new BorderLayout());
-        shadowPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Remover a borda
+        titleLabel.setForeground(Color.WHITE); // Branco
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
 
         JPanel formPanel = new JPanel();
-        formPanel.setBackground(new Color(238, 130, 238)); // Violeta escuro
+        formPanel.setBackground(new Color(54, 59, 78)); // Verde escuro
         formPanel.setLayout(new GridBagLayout());
 
         // Adicionar borda fina ao redor do formPanel
-        Border formPanelBorder = BorderFactory.createLineBorder(new Color(75, 0, 130), 1, true);
+        Border formPanelBorder = BorderFactory.createLineBorder(new Color(87, 187, 98), 1, true);
         formPanel.setBorder(formPanelBorder);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         JLabel label1 = new JLabel("Nome:");
+        label1.setForeground(Color.WHITE); // Branco
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -78,6 +57,7 @@ public class MySwingApp extends JFrame {
         formPanel.add(textField1, gbc);
 
         JLabel label2 = new JLabel("Email:");
+        label2.setForeground(Color.WHITE); // Branco
         gbc.gridx = 0;
         gbc.gridy = 1;
         formPanel.add(label2, gbc);
@@ -89,6 +69,7 @@ public class MySwingApp extends JFrame {
         formPanel.add(textField2, gbc);
 
         JLabel label3 = new JLabel("Senha:");
+        label3.setForeground(Color.WHITE); // Branco
         gbc.gridx = 0;
         gbc.gridy = 2;
         formPanel.add(label3, gbc);
@@ -101,6 +82,9 @@ public class MySwingApp extends JFrame {
 
         JButton button = new JButton("Cadastrar");
         button.setPreferredSize(new Dimension(120, 35)); // Definindo uma largura e altura personalizadas
+        button.setBackground(new Color(87, 187, 98)); // Verde claro
+        button.setForeground(Color.WHITE); // Branco
+        button.setFocusPainted(false); // Remover o contorno de foco
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
@@ -108,16 +92,10 @@ public class MySwingApp extends JFrame {
         gbc.insets = new Insets(10, 80, 10, 80);
         formPanel.add(button, gbc);
 
-        shadowPanel.add(formPanel, BorderLayout.CENTER);
-
-        GridBagConstraints gbcMain = new GridBagConstraints();
-        gbcMain.gridx = 0;
-        gbcMain.gridy = 1;
-        mainPanel.add(shadowPanel, gbcMain);
+        mainPanel.add(formPanel, BorderLayout.CENTER);
 
         getContentPane().add(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
         setVisible(true);
 
         // Ação do botão "Cadastrar"

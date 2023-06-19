@@ -11,6 +11,8 @@ public class OverGolsInterface extends JFrame {
     private Partidas partidas;
     private JTextPane dadosTextPane;
     private String nomeUsuario;
+    private String conteudoOriginal;
+
 
 
     public OverGolsInterface(String username) {
@@ -31,35 +33,49 @@ public class OverGolsInterface extends JFrame {
         // Crie o painel principal
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBackground(new Color(240, 240, 240));
 
         // Cabeçalho
         JPanel cabecalhoPanel = new JPanel(new BorderLayout());
-        cabecalhoPanel.setBackground(new Color(0, 128, 0)); // Defina a cor de fundo para verde
+        cabecalhoPanel.setBackground(new Color(54, 59, 78)); // Defina a cor de fundo para verde
         cabecalhoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-// Título com logotipo
-        ImageIcon logo = new ImageIcon("Overgols-master/src/over1.png"); // Substitua pelo caminho do seu logotipo
-        JLabel tituloLabel = new JLabel(logo);
+// Carregando a imagem do arquivo
+        ImageIcon logo = new ImageIcon("C:\\Users\\joaor\\eclipse-workspace\\Overgols\\imagens\\fd2623dedfa19289f8110784f36dc541.png");
+
+// Redimensionando a imagem para um tamanho desejado
+        Image imagemRedimensionada = logo.getImage().getScaledInstance(150, 20, Image.SCALE_SMOOTH);
+
+// Criando um novo ImageIcon com a imagem redimensionada
+        ImageIcon logoRedimensionado = new ImageIcon(imagemRedimensionada);
+
+// Criando o JLabel com o ImageIcon redimensionado
+        JLabel tituloLabel = new JLabel(logoRedimensionado);
+
+// Definindo o alinhamento do JLabel
+        tituloLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+// Adicionando o JLabel ao painel
         cabecalhoPanel.add(tituloLabel, BorderLayout.WEST);
+
 
 // Campo de busca
         JTextField buscarTextField = new JTextField();
         buscarTextField.setPreferredSize(new Dimension(150, 30));
-        buscarTextField.setBackground(new Color(200, 200, 200));
+        buscarTextField.setBackground(new Color(62, 63, 75));
 
 // Centralize o campo de busca no cabeçalho
-        JPanel buscaPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buscaPanel.setBackground(new Color(0, 128, 0)); // Defina a cor de fundo para verde
+        JPanel buscaPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buscaPanel.setBackground(new Color(54, 59, 78)); // Defina a cor de fundo para verde
         buscaPanel.add(buscarTextField);
         cabecalhoPanel.add(buscaPanel, BorderLayout.CENTER);
 
 // Usuário e botão de sair
         JPanel usuarioPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        usuarioPanel.setBackground(new Color(0, 128, 0)); // Defina a cor de fundo para verde
+        usuarioPanel.setBackground(new Color(54, 59, 78)); // Defina a cor de fundo para verde
         JLabel welcomeLabel = new JLabel("Bem-vindo, " + nomeUsuario + "!");
 
         JButton sairButton = new JButton("Sair");
+        sairButton.setBorderPainted(false); // Remove a borda do botão
         sairButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,7 +96,7 @@ public class OverGolsInterface extends JFrame {
         dadosTextPane = new JTextPane();
         dadosTextPane.setEditable(false);
         dadosTextPane.setFont(new Font("Arial", Font.PLAIN, 14));
-        dadosTextPane.setBackground(Color.BLACK); // Defina o fundo como preto
+        dadosTextPane.setBackground(new Color(49, 55, 72)); // Defina o fundo como preto
 
 
         // Adicione o JTextPane a um JScrollPane para permitir a rolagem
@@ -138,7 +154,6 @@ public class OverGolsInterface extends JFrame {
 
     private JPanel createPartidaPanel(String partida, String probabilidade) {
         JPanel outerPanel = new JPanel(new BorderLayout());
-        outerPanel.setBackground(new Color(240, 240, 240));
         outerPanel.setPreferredSize(new Dimension(800, 80)); // Ajuste a largura e a altura desejadas
 
         JPanel panel = new JPanel(new GridBagLayout());
@@ -196,7 +211,7 @@ public class OverGolsInterface extends JFrame {
 
         // Centralize o painel no contêiner principal
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        centerPanel.setBackground(new Color(0, 0, 0));
+        centerPanel.setBackground(new Color(49, 55, 72));
         centerPanel.add(panel);
 
         // Adicione o painel centralizado ao contêiner externo
