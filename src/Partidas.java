@@ -2,17 +2,27 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe que representa as partidas de um campeonato.
+ */
 public class Partidas {
     private final BancoDeDados bancoDeDados;
     private Connection connection;
 
-
+    /**
+     * Construtor da classe Partidas.
+     *
+     * @param bancoDeDados objeto da classe BancoDeDados para acesso ao banco de dados.
+     */
     public Partidas(BancoDeDados bancoDeDados) {
         this.bancoDeDados = bancoDeDados;
     }
 
-
-
+    /**
+     * Obtém as próximas partidas do campeonato.
+     *
+     * @return uma lista de strings com as informações das próximas partidas.
+     */
     public List<String> obterProximasPartidas() {
         List<String> jogos = new ArrayList<>();
 
@@ -28,8 +38,6 @@ public class Partidas {
                     "   SELECT MIN(STR_TO_DATE(DATADAPARTIDA, '%d/%m/%Y')) FROM PARTIDAS WHERE STR_TO_DATE(DATADAPARTIDA, '%d/%m/%Y') > CURDATE()" +
                     ") " +
                     "ORDER BY STR_TO_DATE(p.DATADAPARTIDA, '%d/%m/%Y'), STR_TO_DATE(p.HORADAPARTIDA, '%H:%i')";
-
-
 
             // Preparar a consulta SQL
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -55,7 +63,6 @@ public class Partidas {
                 jogos.add(jogo);
             }
 
-
             resultSet.close();
             statement.close();
             connection.close();
@@ -66,6 +73,11 @@ public class Partidas {
         return jogos;
     }
 
+    /**
+     * Calcula e imprime a probabilidade de ocorrer mais de um gol em cada partida.
+     *
+     * @return uma lista de strings com os resultados da probabilidade.
+     */
     public List<String> calcularEImprimirProbabilidadeMaisDeUmGol() {
         List<String> resultados = new ArrayList<>();
 
@@ -83,7 +95,6 @@ public class Partidas {
                     "WHERE STR_TO_DATE(p.DATADAPARTIDA, '%d/%m/%Y') = (SELECT MIN(STR_TO_DATE(DATADAPARTIDA, '%d/%m/%Y')) " +
                     "FROM PARTIDAS WHERE STR_TO_DATE(DATADAPARTIDA, '%d/%m/%Y') > CURDATE()) " +
                     "ORDER BY STR_TO_DATE(p.DATADAPARTIDA, '%d/%m/%Y'), STR_TO_DATE(p.HORADAPARTIDA, '%H:%i')";
-
 
             try (Statement stmt = conn.createStatement()) {
                 ResultSet rs = stmt.executeQuery(sql);
@@ -113,6 +124,13 @@ public class Partidas {
         return resultados;
     }
 
+    /**
+     * Calcula a probabilidade de ocorrer mais de um gol em uma partida.
+     *
+     * @param mediaMandante  média de gols marcados pelo time mandante em partidas anteriores.
+     * @param mediaVisitante média de gols marcados pelo time visitante em partidas anteriores.
+     * @return a probabilidade de ocorrer mais de um gol na partida.
+     */
     public double calcularProbabilidadeMaisDeUmGol(double mediaMandante, double mediaVisitante) {
         double probabilidadeMandanteZeroGol = Math.exp(-mediaMandante) * Math.pow(mediaMandante, 0) / factorial(0);
         double probabilidadeMandanteUmGol = Math.exp(-mediaMandante) * Math.pow(mediaMandante, 1) / factorial(1);
@@ -126,14 +144,16 @@ public class Partidas {
 
         return probabilidadeMaisDeUmGol;
     }
-
+    /**
+     * Calcula o fatorial de um número.
+     *
+     * @param n o número para calcular o fatorial.
+     * @return o valor do fatorial.
+     */
     public static int factorial(int n) {
         if (n == 0 || n == 1)
             return 1;
         else
             return n * factorial(n - 1);
     }
-
-
-
 }

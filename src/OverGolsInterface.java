@@ -4,52 +4,60 @@ import java.awt.Font;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
+/**
+ * Classe que representa a interface gráfica do aplicativo Over Gols.
+ */
 public class OverGolsInterface extends JFrame {
     private Partidas partidas;
     private JTextPane dadosTextPane;
     private String nomeUsuario;
 
-
+    /**
+     * Construtor da classe OverGolsInterface.
+     * Cria uma instância da classe OverGolsInterface e configura a interface gráfica.
+     *
+     * @param username o nome do usuário logado
+     */
     public OverGolsInterface(String username) {
         this.nomeUsuario = username;
 
-        // Create an instance of the database and the Partidas class
+        // Cria uma instância do banco de dados e da classe Partidas
         BancoDeDados bancoDeDados = new BancoDeDados("root", "Gdyp07@o");
         partidas = new Partidas(bancoDeDados);
 
-
-        // Configure the window
+        // Configura a janela
         setTitle("Over Gols");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600); // Define o tamanho da janela
+        setSize(800, 600);
 
-
-        // Create the main panel
+        // Cria o painel principal
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        // Header
+        // Cabeçalho
         JPanel cabecalhoPanel = new JPanel(new BorderLayout());
         cabecalhoPanel.setBackground(new Color(54, 59, 78));
         cabecalhoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Loading the image from the file
+        // Carrega a imagem do arquivo
         ImageIcon logo = new ImageIcon("C:\\Users\\joaor\\eclipse-workspace\\Overgols\\imagens\\fd2623dedfa19289f8110784f36dc541.png");
 
-        // Resizing the image to the desired size
+        // Redimensiona a imagem para o tamanho desejado
         Image imagemRedimensionada = logo.getImage().getScaledInstance(150, 20, Image.SCALE_SMOOTH);
 
-        // Creating a new ImageIcon with the resized image
+        // Cria um novo ImageIcon com a imagem redimensionada
         ImageIcon logoRedimensionado = new ImageIcon(imagemRedimensionada);
 
-        // Creating the JLabel with the resized ImageIcon
+        // Cria o JLabel com o ImageIcon redimensionado
         JLabel tituloLabel = new JLabel(logoRedimensionado);
         tituloLabel.setHorizontalAlignment(SwingConstants.LEFT);
         cabecalhoPanel.add(tituloLabel, BorderLayout.WEST);
 
-        // Search field
+        // Campo de pesquisa
         JTextField buscarTextField = new JTextField();
         buscarTextField.setPreferredSize(new Dimension(150, 30));
         buscarTextField.setBackground(new Color(62, 63, 75));
@@ -59,42 +67,36 @@ public class OverGolsInterface extends JFrame {
         buscaPanel.add(buscarTextField);
         cabecalhoPanel.add(buscaPanel, BorderLayout.CENTER);
 
-        // Crie uma instância da classe Font com a fonte desejada
+        // Cria uma instância da classe Font com a fonte desejada
         Font fontePersonalizada = new Font("Novo Correio", Font.CENTER_BASELINE, 14);
 
-// Crie o JLabel com o texto e a fonte personalizada
-        JLabel welcomeLabel = new JLabel( nomeUsuario + "!");
+        // Cria o JLabel com o texto e a fonte personalizada
+        JLabel welcomeLabel = new JLabel(nomeUsuario + "!");
         welcomeLabel.setFont(fontePersonalizada);
+        welcomeLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Adiciona um cursor de mão para indicar que é clicável
+        welcomeLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                // Abre a interface de troca de senha
+                UserOptionsInterface changePasswordInterface = new UserOptionsInterface(nomeUsuario);
+            }
+        });
 
-// Continue com o restante do código
         JPanel usuarioPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         usuarioPanel.setBackground(new Color(54, 59, 78));
         JButton sairButton = new JButton("Sair");
-        sairButton.setBorderPainted(false);
-        sairButton.setForeground(Color.WHITE);
-        sairButton.setFocusPainted(false);
-        sairButton.setContentAreaFilled(false);
-        sairButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                LoginScreen loginScreen = new LoginScreen();
-                loginScreen.setVisible(true);
-            }
-        });
         usuarioPanel.add(welcomeLabel);
         usuarioPanel.add(sairButton);
         cabecalhoPanel.add(usuarioPanel, BorderLayout.EAST);
         panel.add(cabecalhoPanel, BorderLayout.NORTH);
 
-        // JTextPane for displaying upcoming matches and probability of more than one goal
+        // JTextPane para exibir as próximas partidas e a probabilidade de mais de um gol
         dadosTextPane = new JTextPane();
         dadosTextPane.setEditable(false);
         dadosTextPane.setBackground(new Color(39, 43, 57));
         dadosTextPane.setForeground(Color.WHITE);
         dadosTextPane.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
 
-        // ScrollPane for the JTextPane
+        // JScrollPane para o JTextPane
         JScrollPane scrollPane = new JScrollPane(dadosTextPane);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setViewportBorder(BorderFactory.createEmptyBorder());
@@ -102,7 +104,7 @@ public class OverGolsInterface extends JFrame {
 
         panel.add(scrollPane, BorderLayout.CENTER);
 
-        // Footer
+        // Rodapé
         JPanel rodapePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rodapePanel.setBackground(new Color(54, 59, 78));
         JLabel rodapeLabel = new JLabel("© 2023 Over Gols. Todos os direitos reservados.");
@@ -111,34 +113,44 @@ public class OverGolsInterface extends JFrame {
 
         panel.add(rodapePanel, BorderLayout.SOUTH);
 
-        // Add the main panel to the frame
+        // Adiciona o painel principal ao frame
         add(panel);
 
-        // Load the data initially
+        // Carrega os dados inicialmente
         atualizarDados();
     }
 
+    /**
+     * Atualiza os dados exibidos na interface gráfica.
+     */
     private void atualizarDados() {
-        // Get the list of upcoming matches
+        // Obtém a lista de próximas partidas
         List<String> proximasPartidas = partidas.obterProximasPartidas();
 
-        // Calculate and retrieve the probability of more than one goal
+        // Calcula e obtém a probabilidade de mais de um gol
         List<String> probabilidades = partidas.calcularEImprimirProbabilidadeMaisDeUmGol();
 
-        // Clear the previous content of the JTextPane
+        // Limpa o conteúdo anterior do JTextPane
         dadosTextPane.setText("");
 
-        // Add the matches to the JTextPane
+        // Adiciona as partidas ao JTextPane
         for (int i = 0; i < proximasPartidas.size(); i++) {
             String partida = proximasPartidas.get(i);
             String probabilidade = probabilidades.get(i);
 
             JPanel partidaPanel = createPartidaPanel(partida, probabilidade);
             dadosTextPane.insertComponent(partidaPanel);
-            dadosTextPane.insertComponent(Box.createVerticalStrut(10)); // Adds vertical space between the matches
+            dadosTextPane.insertComponent(Box.createVerticalStrut(10)); // Adiciona espaço vertical entre as partidas
         }
     }
 
+    /**
+     * Cria um painel para exibir uma partida e sua probabilidade de mais de um gol.
+     *
+     * @param partida       a descrição da partida
+     * @param probabilidade a probabilidade de mais de um gol na partida
+     * @return o painel criado
+     */
     private JPanel createPartidaPanel(String partida, String probabilidade) {
         JPanel outerPanel = new JPanel(new BorderLayout());
         outerPanel.setPreferredSize(new Dimension(800, 80));
@@ -182,6 +194,11 @@ public class OverGolsInterface extends JFrame {
         return outerPanel;
     }
 
+    /**
+     * Método principal que inicia o aplicativo Over Gols.
+     *
+     * @param args argumentos da linha de comando (não utilizados)
+     */
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
