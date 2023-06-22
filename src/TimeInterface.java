@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
@@ -8,6 +10,8 @@ import java.sql.SQLException;
 public class TimeInterface extends JFrame {
     private JTextArea textArea;
     private Time time;
+    private JButton backButton;
+    private JPanel contentPanel;
 
     public TimeInterface() {
         setTitle("Nomes dos Times");
@@ -17,11 +21,25 @@ public class TimeInterface extends JFrame {
 
         time = new Time();
 
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new BorderLayout());
+
         textArea = new JTextArea();
         textArea.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
+
+        backButton = new JButton("Voltar");
+        backButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                textArea.setText("");
+                imprimirNomesDosTimes();
+            }
+        });
+        contentPanel.add(backButton, BorderLayout.SOUTH);
+
+        setContentPane(contentPanel);
 
         // Add a MouseListener to the JTextArea
         textArea.addMouseListener(new MouseAdapter() {
@@ -49,7 +67,6 @@ public class TimeInterface extends JFrame {
 
     public void imprimirNomesDosTimes() {
         ResultSet resultSet = time.obterNomesDosTimes();
-        textArea.setText("");
 
         if (resultSet != null) {
             try {
@@ -60,32 +77,37 @@ public class TimeInterface extends JFrame {
 
                 resultSet.close();
             } catch (SQLException e) {
-                System.out.println("Erro ao ler dados do ResultSet: " + e.getMessage());
+                System.out.println("Erro ao ler resultado da consulta: " + e.getMessage());
             }
+        } else {
+            System.out.println("Não foi possível obter os nomes dos times.");
         }
     }
 
     public void exibirUltimasPartidas(String timeSelecionado) {
         ResultSet resultSet = time.obterUltimasPartidas(timeSelecionado);
-        textArea.setText("Últimas 5 partidas de " + timeSelecionado + ":\n");
 
         if (resultSet != null) {
             try {
+                textArea.setText("Últimas 5 partidas de " + timeSelecionado + ":\n");
+
                 while (resultSet.next()) {
                     String partida = "Rodada: " + resultSet.getString("RODADAS") +
-                            " " + resultSet.getString("DATADAPARTIDA") +
-                            " " + resultSet.getString("HORADAPARTIDA") +
-                            " " + resultSet.getString("NOME_MANDANTE") +
-                            " " + resultSet.getString("GOLSMANDANTE") +
-                            " " + resultSet.getString("NOME_VISITANTE") +
-                            " " + resultSet.getString("GOLSVISITANTE");
+                            ", Data: " + resultSet.getString("DATADAPARTIDA") +
+                            ", Hora: " + resultSet.getString("HORADAPARTIDA") +
+                            ", Mandante: " + resultSet.getString("NOME_MANDANTE") +
+                            ", Gols Mandante: " + resultSet.getString("GOLSMANDANTE") +
+                            ", Visitante: " + resultSet.getString("NOME_VISITANTE") +
+                            ", Gols Visitante: " + resultSet.getString("GOLSVISITANTE");
                     textArea.append(partida + "\n");
                 }
 
                 resultSet.close();
             } catch (SQLException e) {
-                System.out.println("Erro ao ler dados do ResultSet: " + e.getMessage());
+                System.out.println("Erro ao ler resultado da consulta: " + e.getMessage());
             }
+        } else {
+            System.out.println("Não foi possível obter as últimas partidas.");
         }
     }
 

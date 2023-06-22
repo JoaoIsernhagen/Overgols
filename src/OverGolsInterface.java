@@ -55,14 +55,16 @@ public class OverGolsInterface extends JFrame {
         tituloLabel.setHorizontalAlignment(SwingConstants.LEFT);
         cabecalhoPanel.add(tituloLabel, BorderLayout.WEST);
 
-        // Campo de pesquisa
-        JTextField buscarTextField = new JTextField();
-        buscarTextField.setPreferredSize(new Dimension(150, 30));
-        buscarTextField.setBackground(new Color(62, 63, 75));
-
+        // Botão para abrir a página de times
+        JButton timesButton = new JButton("Times");
+        timesButton.addActionListener(e -> {
+            TimeInterface timeInterface = new TimeInterface();
+            timeInterface.setVisible(true);
+            timeInterface.imprimirNomesDosTimes();
+        });
         JPanel buscaPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buscaPanel.setBackground(new Color(54, 59, 78));
-        buscaPanel.add(buscarTextField);
+        buscaPanel.add(timesButton);
         cabecalhoPanel.add(buscaPanel, BorderLayout.CENTER);
 
         // Cria uma instância da classe Font com a fonte desejada
