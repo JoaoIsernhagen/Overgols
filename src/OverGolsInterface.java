@@ -2,8 +2,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.Font;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -80,6 +78,8 @@ public class OverGolsInterface extends JFrame {
                 UserOptionsInterface changePasswordInterface = new UserOptionsInterface(nomeUsuario);
             }
         });
+
+
 
         JPanel usuarioPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         usuarioPanel.setBackground(new Color(54, 59, 78));
