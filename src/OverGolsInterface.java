@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+
 /**
  * Classe que representa a interface gráfica do aplicativo Over Gols.
  */
@@ -66,6 +67,17 @@ public class OverGolsInterface extends JFrame {
         buscaPanel.setBackground(new Color(54, 59, 78));
         buscaPanel.add(timesButton);
         cabecalhoPanel.add(buscaPanel, BorderLayout.CENTER);
+
+
+
+        // Botão para abrir a página de campeonatos
+        JButton campeonatosButton = new JButton("Campeonatos");
+        campeonatosButton.addActionListener(e -> {
+            CampeonatosInterface campeonatosInterface = new CampeonatosInterface();
+            campeonatosInterface.setVisible(true);
+        });
+        buscaPanel.add(campeonatosButton);
+
 
         // Cria uma instância da classe Font com a fonte desejada
         Font fontePersonalizada = new Font("Novo Correio", Font.CENTER_BASELINE, 14);
