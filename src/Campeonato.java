@@ -2,13 +2,24 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A classe Campeonato representa um campeonato e fornece métodos para acessar informações sobre ele.
+ */
 public class Campeonato {
     private BancoDeDados bancoDeDados;
 
+    /**
+     * Cria uma instância da classe Campeonato.
+     * @param bancoDeDados o objeto BancoDeDados a ser utilizado para conexão com o banco de dados.
+     */
     public Campeonato(BancoDeDados bancoDeDados) {
         this.bancoDeDados = bancoDeDados;
     }
 
+    /**
+     * Obtém uma lista de anos em que o campeonato ocorreu.
+     * @return uma lista contendo os anos do campeonato.
+     */
     public List<String> getYears() {
         List<String> years = new ArrayList<>();
 
@@ -35,6 +46,11 @@ public class Campeonato {
         return years;
     }
 
+    /**
+     * Obtém uma lista de rodadas para um determinado ano do campeonato.
+     * @param year o ano do campeonato.
+     * @return uma lista contendo as rodadas do ano especificado.
+     */
     public List<String> getRounds(String year) {
         List<String> rounds = new ArrayList<>();
 
@@ -66,6 +82,12 @@ public class Campeonato {
         return rounds;
     }
 
+    /**
+     * Obtém uma lista de partidas para um determinado ano e rodada do campeonato.
+     * @param year o ano do campeonato.
+     * @param round a rodada do campeonato.
+     * @return uma lista contendo as partidas do ano e rodada especificados.
+     */
     public List<String> getMatches(String year, String round) {
         List<String> matches = new ArrayList<>();
 
@@ -94,7 +116,6 @@ public class Campeonato {
                     String match = String.format("%s - %s vs %d: %d x %s", date, teamHome, goalsHome, goalsAway, teamAway);
                     matches.add(match);
                 }
-
 
                 resultSet.close();
                 statement.close();

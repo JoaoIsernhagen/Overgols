@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * Classe que representa a interface gráfica para seleção de campeonatos e exibição de partidas.
+ */
 public class CampeonatosInterface extends JFrame {
 
     private JComboBox<String> yearComboBox;
@@ -12,6 +15,11 @@ public class CampeonatosInterface extends JFrame {
 
     private Campeonato campeonato;
 
+    /**
+     * Construtor da classe CampeonatosInterface.
+     * Configura a janela e inicializa os componentes da interface.
+     * Carrega os anos de campeonato e instancia a classe Campeonato.
+     */
     public CampeonatosInterface() {
         super("Interface de Campeonatos");
 
@@ -69,6 +77,9 @@ public class CampeonatosInterface extends JFrame {
         loadYears();
     }
 
+    /**
+     * Carrega os anos de campeonato no combobox.
+     */
     private void loadYears() {
         // Carrega os anos de campeonato a partir do banco de dados
         List<String> years = campeonato.getYears();
@@ -77,6 +88,11 @@ public class CampeonatosInterface extends JFrame {
         }
     }
 
+    /**
+     * Carrega as rodadas do ano selecionado no combobox de rodadas.
+     *
+     * @param year Ano selecionado.
+     */
     private void loadRounds(String year) {
         // Carrega as rodadas do ano selecionado a partir do banco de dados
         List<String> rounds = campeonato.getRounds(year);
@@ -86,6 +102,11 @@ public class CampeonatosInterface extends JFrame {
         }
     }
 
+    /**
+     * Exibe as partidas na área de texto.
+     *
+     * @param matches Lista de partidas a serem exibidas.
+     */
     private void displayMatches(List<String> matches) {
         // Exibe as partidas na caixa de texto
         matchesTextArea.setText("");
@@ -99,6 +120,11 @@ public class CampeonatosInterface extends JFrame {
         }
     }
 
+    /**
+     * Método principal que inicia a interface.
+     *
+     * @param args Argumentos de linha de comando.
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override

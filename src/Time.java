@@ -3,13 +3,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * A classe Time representa uma entidade de time de futebol e é responsável por obter informações relacionadas aos times do banco de dados.
+ */
 public class Time {
     private BancoDeDados bancoDeDados;
 
+    /**
+     * Cria uma instância da classe Time e instancia a classe BancoDeDados.
+     */
     public Time() {
         bancoDeDados = new BancoDeDados("root", "Gdyp07@o");
     }
 
+    /**
+     * Obtém os nomes dos times do banco de dados.
+     * @return um ResultSet contendo os nomes dos times.
+     */
     public ResultSet obterNomesDosTimes() {
         Connection connection = bancoDeDados.conectar();
         ResultSet resultSet = null;
@@ -29,6 +39,11 @@ public class Time {
         return resultSet;
     }
 
+    /**
+     * Obtém as últimas partidas de um time específico.
+     * @param timeSelecionado o nome do time selecionado.
+     * @return um ResultSet contendo as informações das últimas partidas do time.
+     */
     public ResultSet obterUltimasPartidas(String timeSelecionado) {
         Connection connection = bancoDeDados.conectar();
         ResultSet resultSet = null;

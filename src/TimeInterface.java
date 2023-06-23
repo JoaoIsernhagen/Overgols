@@ -7,12 +7,18 @@ import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * A classe TimeInterface representa uma interface gráfica para exibir nomes de times e as últimas partidas de um time selecionado.
+ */
 public class TimeInterface extends JFrame {
     private JTextArea textArea;
     private Time time;
     private JButton backButton;
     private JPanel contentPanel;
 
+    /**
+     * Cria uma instância da classe TimeInterface e configura a janela da interface.
+     */
     public TimeInterface() {
         setTitle("Nomes dos Times");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,11 +47,11 @@ public class TimeInterface extends JFrame {
 
         setContentPane(contentPanel);
 
-        // Add a MouseListener to the JTextArea
+        // Adiciona um MouseListener ao JTextArea
         textArea.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) { // Detect double-click
+                if (e.getClickCount() == 2) { // Detecta o duplo clique
                     JTextArea source = (JTextArea) e.getSource();
                     int caretPosition = source.getCaretPosition();
                     int line;
@@ -65,6 +71,9 @@ public class TimeInterface extends JFrame {
         });
     }
 
+    /**
+     * Imprime os nomes dos times na JTextArea.
+     */
     public void imprimirNomesDosTimes() {
         ResultSet resultSet = time.obterNomesDosTimes();
 
@@ -84,6 +93,10 @@ public class TimeInterface extends JFrame {
         }
     }
 
+    /**
+     * Exibe as últimas partidas do time selecionado na JTextArea.
+     * @param timeSelecionado o nome do time selecionado.
+     */
     public void exibirUltimasPartidas(String timeSelecionado) {
         ResultSet resultSet = time.obterUltimasPartidas(timeSelecionado);
 
@@ -111,6 +124,11 @@ public class TimeInterface extends JFrame {
         }
     }
 
+    /**
+     * O método principal que cria uma instância da classe TimeInterface e exibe a interface.
+     * Também imprime os nomes dos times na JTextArea.
+     * @param args os argumentos de linha de comando (não são utilizados).
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             TimeInterface timeInterface = new TimeInterface();

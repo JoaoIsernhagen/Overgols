@@ -3,10 +3,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * A classe UserOptionsInterface representa uma interface gráfica para permitir ao usuário trocar sua senha ou excluir sua conta.
+ */
 public class UserOptionsInterface extends JFrame {
     private String username;
     private Usuario usuario;
 
+    /**
+     * Cria uma instância da classe UserOptionsInterface com o nome de usuário fornecido.
+     * @param username o nome de usuário.
+     */
     public UserOptionsInterface(String username) {
         super("Trocar Senha");
 
@@ -92,6 +99,10 @@ public class UserOptionsInterface extends JFrame {
         });
     }
 
+    /**
+     * O método principal que cria uma instância da classe UserOptionsInterface com um nome de usuário fictício.
+     * @param args os argumentos de linha de comando (não são utilizados).
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
